@@ -11,6 +11,7 @@ import java.util.ResourceBundle;
 
 import it.polito.tdp.corsi.model.Corso;
 import it.polito.tdp.corsi.model.Model;
+import it.polito.tdp.corsi.model.Studente;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -95,7 +96,7 @@ public class FXMLController {
     	for(Corso c : corsiIscrizioni.keySet()) {
     		txtRisultato.appendText(c.toString());
     		Integer n = corsiIscrizioni.get(c);
-    		txtRisultato.appendText("\t" +n + "\n");
+    		txtRisultato.appendText("  --->  " +n + " iscritti\n");
     	}
     }
 
@@ -106,7 +107,20 @@ public class FXMLController {
 
     @FXML
     void stampaStudenti(ActionEvent event) {
-
+    	txtRisultato.clear();
+    	String codice = txtCorso.getText();
+    	if(codice == null) {
+    		txtRisultato.setText("Devi scrivere qualcosa");
+    		return;
+    	}
+    	List<Studente> studenti = this.model.getStudentiByCodIns(codice);
+    	if (studenti.size()==0) {
+    		txtRisultato.setText("Non ci sono studenti iscritti o il codice non è corretto");
+    		return;
+    	}
+    	for(Studente si : studenti) {
+    		txtRisultato.appendText(si.toString()+"\n");
+    	}
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
