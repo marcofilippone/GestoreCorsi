@@ -100,10 +100,6 @@ public class FXMLController {
     	}
     }
 
-    @FXML
-    void stampaDivisione(ActionEvent event) {
-
-    }
 
     @FXML
     void stampaStudenti(ActionEvent event) {
@@ -113,13 +109,40 @@ public class FXMLController {
     		txtRisultato.setText("Devi scrivere qualcosa");
     		return;
     	}
+    	if(!model.esisteCorso(codice)) {
+    		txtRisultato.appendText("Il corso non esiste");
+    		return;
+    	}
     	List<Studente> studenti = this.model.getStudentiByCodIns(codice);
     	if (studenti.size()==0) {
-    		txtRisultato.setText("Non ci sono studenti iscritti o il codice non è corretto");
+    		txtRisultato.setText("Non ci sono studenti iscritti a questo corso");
     		return;
     	}
     	for(Studente si : studenti) {
     		txtRisultato.appendText(si.toString()+"\n");
+    	}
+    }
+    
+    @FXML
+    void stampaDivisione(ActionEvent event) {
+    	txtRisultato.clear();
+    	String codice = txtCorso.getText();
+    	if(codice == null) {
+    		txtRisultato.setText("Devi scrivere qualcosa");
+    		return;
+    	}
+    	if(!model.esisteCorso(codice)) {
+    		txtRisultato.appendText("Il corso non esiste");
+    		return;
+    	}
+    	if(model.getDivisioneCDS(codice).keySet().size()==0) {
+    		txtRisultato.appendText("Il corso non ha nessuno studente iscritto");
+    		return;
+    	}
+    	
+    	Map<String, Integer> divisione = model.getDivisioneCDS(codice);
+    	for(String cds : divisione.keySet()) {
+    		txtRisultato.appendText(cds + " ---> " +divisione.get(cds) + " studenti\n");
     	}
     }
 
